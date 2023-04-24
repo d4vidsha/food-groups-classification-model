@@ -20,7 +20,7 @@ TODO: Add a description of the file structure and use of each file.
 
 ## Instructions
 
-This project uses Python 3.11.3. See [Additional requirements for code to run](#additional-requirements) for instructions on setting up the correct Python environment and installing dependencies.
+This project uses Python 3.11.3. See [Additional requirements](#additional-requirements) for instructions on setting up the correct Python environment and installing dependencies.
 
 ### Running the code
 
