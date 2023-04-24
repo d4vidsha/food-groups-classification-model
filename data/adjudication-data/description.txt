@@ -1,0 +1,14 @@
+
+The dataset is from https://discover.data.vic.gov.au/dataset/building-and-construction-industry-security-of-payment-adjudication-activity-data where it is described as follows:
+
+"Every day, individuals and organisations enter into contracts for building and construction – and sometimes disputes arise over payment.
+
+The Building and Construction Industry Security of Payment Act 2002 (known as the SOP Act) helps ensure that any person who carries out construction work or supplies related goods and services under a construction contract gets paid.
+
+It is designed to provide a fast and inexpensive process to recover payments due under a construction contract, without the need for lawyers to become involved.
+
+The VBA monitors the operation of the SOP Act. It does not nominate adjudicators or take part in payment disputes. This is the role of Authorised Nominating Authorities (ANAs) who are authorised by the VBA to perform this service
+
+The data covers adjudications that have occurred in the context the SOP Act."
+
+

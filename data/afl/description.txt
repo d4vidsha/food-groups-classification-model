@@ -1,0 +1,32 @@
+
+Australian Rules Football Statistics
+
+Dataset is from https://afltables.com/afl/stats/2022a.html
+
+Description of the features is below.   Knowledge about Australian Rules Football will be helpful if you are interested to work with this dataset.
+
+Player
+Tm=Team
+GM=Games played 
+KI=Kicks 
+MK=Marks 
+HB=Handballs 
+DI=Disposals 
+GL=Goals 
+BH=Behinds 
+HO=Hit outs 
+TK=Tackles 
+RB=Rebound SOs 
+IF=Inside SOs 
+CL=Clearances 
+CG=Clangers 
+FF=Free kicks for 
+FA=Free kicks against 
+BR=Brownlow votes 
+CP=Contested possessions 
+UP=Uncontested possessions 
+CM=Contested marks 
+MI=Marks inside SO 
+1%=One percenters 
+BO=Bounces 
+GA=Goal assist 
