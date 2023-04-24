@@ -1,6 +1,7 @@
-# A2-Project 40
+# Group: A2-Project 40
 
 Group leader: username, name
+
 Members: username, name
 
 ## Introduction
