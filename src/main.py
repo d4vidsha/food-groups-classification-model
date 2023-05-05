@@ -2,17 +2,20 @@
 #   pip install xlrd
 #   pip install openpyxl
 import pandas as pd
+import re
 
-
-
+#   data should remain the original excel sheet
 data = pd.read_excel(r'data\nutrient-file-release2-jan22.xlsx', sheet_name='All solids & liquids per 100g')
-#   filter out data that has NAN values 
+
+
+#   list of nutrition column names
+nutr_cols = list(data.columns[3:])
 
 
 
 #   counts unique classifications
 class_count = data["Classification"].nunique()
-print(f"Number of Unique Food Classifications: {class_count}\n")
+print(f"Number of Unique Food Classifications: {class_count}")
 
 #   counts number of different nutrition types/columns
 col_count = len(data.columns) - 3
@@ -24,19 +27,62 @@ for column in data.columns[3:]:
 
 
 
+#   -------------------------------------------------------------------------------------------------
+#   dataframe with food name and attributes separated and processed
+sep_attrs = data
+
+#   reg ex
+useless_symbols = r'[^-a-z0-9%@\s\\]'
+multiple_whitespace = r' +'
+###   this can be changed to stopwords but i think words like 'no' are important to keep
+conjunctions = ' and| or| with| from'
+
+attrs = []
+for i, row in sep_attrs.iterrows():
+    food_name = row['Food Name']
+
+    #   casefolds
+    food_name = food_name.casefold()
+
+    #   prepares food name for split
+    food_name = food_name.replace(',', '@', 1)
+    food_name = re.sub(useless_symbols, ' ', food_name)
+    food_name = food_name.strip()
+
+    #   split food name from attributes
+    name_attr = food_name.split('@', 1)
+
+    #   save name
+    sep_attrs.at[i, 'Food Name'] = name_attr[0]
+
+    #   clean attributes and save
+    if len(name_attr) > 1:
+        attr = name_attr[1]
+
+        #   str to clean list
+        attr = re.sub(conjunctions, '', attr)
+        attr = re.sub(multiple_whitespace, ' ', attr)
+        attr = attr.strip()
+        attr = attr.split(' ')
+        attr = [x.strip() for x in attr]
+
+        attrs.append(attr)
+    else:
+        attrs.append('None')
+
+#   adds attributes to df
+sep_attrs.insert(3, 'Attribute', attrs)
+
+###   saves to excel file for easier viewing (temp for convenience)
+file_name = 'sep_attrs.xlsx'
+sep_attrs.to_excel(file_name)
 
 
 
 
-
-#   list of nutrition column names
-nutr_cols = list(data.columns[3:])
-
-
-
+#   -------------------------------------------------------------------------------------------------
+#   dataframe that averages nutrition values by classification
 by_class = pd.DataFrame(columns = data.columns)
-
-#   averages nutritional values for a classification and adds it to  the dataframe
 for classification in data.groupby('Classification'):
     c_df = classification[1]
 
@@ -62,4 +108,4 @@ for classification in data.groupby('Classification'):
 
 
     by_class.loc[len(by_class)] = c_df
-print(by_class)
+
