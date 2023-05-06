@@ -3,10 +3,13 @@
 #   pip install openpyxl
 import pandas as pd
 import re
+import os
 
-#   data should remain the original excel sheet
-data = pd.read_excel(r'data\nutrient-file-release2-jan22.xlsx', sheet_name='All solids & liquids per 100g')
-
+# depending on the OS the path to the data file is different
+if os.name == 'nt':
+    data = pd.read_excel(r'data\nutrient-file-release2-jan22.xlsx', sheet_name='All solids & liquids per 100g')
+elif os.name == 'posix':
+    data = pd.read_excel(r'data/nutrient-file-release2-jan22.xlsx', sheet_name='All solids & liquids per 100g')
 
 #   list of nutrition column names
 nutr_cols = list(data.columns[3:])
