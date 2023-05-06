@@ -7,3 +7,6 @@ pytz==2023.3
 six==1.16.0
 tzdata==2023.3
 xlrd==2.0.1
+matplotlib==3.7.1
+scikit-learn==1.2.2
+seaborn==0.12.2
