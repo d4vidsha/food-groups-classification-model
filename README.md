@@ -1,8 +1,8 @@
 # Group: A2-Project 40
 
-Group leader: username, name
+Group leader: David Sha
 
-Members: username, name
+Members: Victoria Lyngaae, William Spongberg, Mason Sebek
 
 ## Introduction
 
