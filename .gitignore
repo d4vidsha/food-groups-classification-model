@@ -1,6 +1,7 @@
 .venv
 __pycache__
 .DS_Store
+*.code-workspace
 
 # https://github.com/github/gitignore/blob/main/TeX.gitignore
 ## Core latex/pdflatex auxiliary files:
