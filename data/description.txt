@@ -1,7 +1,0 @@
-
-Australian Food Composition Database data
-
-The provided dataset is the nutrient file from
-https://www.foodstandards.gov.au/science/monitoringnutrients/afcd/Pages/downloadableexcelfiles.aspx
-
-
