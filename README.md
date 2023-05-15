@@ -6,25 +6,32 @@ Members: Victoria Lyngaae, William Spongberg, Mason Sebek
 
 ## Introduction
 
-TODO: Add a description of the intended use for the code and csv data files.
+The goal of this project is to create a model that can predict what food group a specific food item belongs to based on its nutritional information. A $k$-nearest neighbour model is used for prediction and the model is trained on a dataset of food items from [Food Standards Australia New Zealand](https://www.foodstandards.gov.au/science/monitoringnutrients/afcd/Pages/downloadableexcelfiles.aspx).
 
 ## File structure
 
-TODO: Add a description of the file structure and use of each file.
+There are four main folders in this repository:
 
 | Folder   | Description                                                          |
 |----------|----------------------------------------------------------------------|
-| `report` | Contains the LaTeX source code for our `project_group40.pdf` report. |
-| `src`    | Contains the source code for our project.                            |
+| `archive`| Contains old files that are no longer used.                          |
 | `data`   | Contains the data files used in our project.                         |
+| `report` | Contains the LaTeX source code for our `project_group40.pdf` report. |
+| `src`    | Contains the main source code for our project.                       |
 
-## Instructions
+## Instructions to run `src` code
 
 This project uses Python 3.11.3. See [Additional requirements](#additional-requirements) for instructions on setting up the correct Python environment and installing dependencies.
 
 ### Running the code
 
-TODO: Add instructions on how to run the code.
+1. Run the `preprocessing.ipynb` notebook to preprocess the data.
+
+   This will create a `data/generated` folder containing `preprocessed-data-classification.csv` and `preprocessed-data-regression.csv`, the former of which is used for the $k$-nn model and the latter of which is used for the linear regression model which we did not end up using.
+
+2. Run the `knn.ipynb` notebook to train and evaluate the $k$-nearest neighbour model.
+
+   This will generate a few plots and saved to `report/figs`.
 
 ## Additional requirements
 

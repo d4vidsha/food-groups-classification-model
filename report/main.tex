@@ -19,7 +19,7 @@
 
 
 
-\title{TODO: Come up with a title}
+\title{Predicting Food Groups \\ \vspace{0.5em} \large from nutritional information}
 
 \author{
     David Sha\\
@@ -31,7 +31,6 @@
     William Spongberg\\
 \AND
 \AND
-\AND
 	COMP20008: Elements of Data Processing\\
 \AND
 	The University of Melbourne\\
@@ -39,7 +38,7 @@
 
 \date{May 2023}
 
-\renewcommand{\headeright}{TODO: Come up with a title}
+\renewcommand{\headeright}{Predicting Food Groups from Nutritional Information}
 \renewcommand{\undertitle}{Report}
 \renewcommand{\shorttitle}{}
 
@@ -54,16 +53,19 @@
 \setcounter{page}{1}
 \section{Introduction}
 
-In this report, we will be analysing a food dataset from \cite{FoodStandardsAustraliaNewZealand}.
+In this report, we will be analysing a food dataset from \cite{FoodStandardsAustraliaNewZealand}. Using the \(k\)-nearest neighbours algorithm, we build a model that predicts the food groups of a food item based on its nutritional information and explore how useful this model is to the food industry.
 
 \subsection{Research Question}
 % 1. What is the research question?
+Can we predict the food group of a food item based solely on its nutritional information?
 
 \subsection{Target Audience}
 % 2. Who are the target audience.
+The outcome of this project may be interesting to supermarket chains. If the model is sufficiently accurate, it could be used to detect food items that may not be labelled correctly or are missing labels. Better classification of food items can improve a supermarket's inventory management and/or product placement and ultimately improve the shopping experience of customers.
 
 \subsection{Dataset}
 % 3. The dataset you have chosen.
+We make use of the dataset from \cite{FoodStandardsAustraliaNewZealand} containing 1616 food items and their nutritional information. This dataset contains all the information we need to answer our research question as each food item has a \verb|Classification| (food group) and respective nutritional information (such as energy, protein, etc.). To give us more context to the \verb|Classification| column, we also use a complementary dataset from \cite{FoodClassification} which maps numerical classifications to their respective food groups which become very useful when preprocessing the data and analysing the results.
 
 \section{Methodology}
 
