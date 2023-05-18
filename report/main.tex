@@ -54,7 +54,9 @@
 \setcounter{page}{1}
 \section{Introduction}
 
-The objective of this project is to wrangle and analyse data contained within the \cite{FoodStandardsAustraliaNewZealand} dataset, for the purpose of answering an explicit and defined research question. We propose the inquiry: Can we predict the food group of a food item, based solely on its nutritional information? We implemented the supervised learning model of k-nearest-neighbours to predict and explore the relationship between nutritional information and food group classification.
+In this report, we will be analysing a food dataset from \cite{FoodStandardsAustraliaNewZealand}. Using the $k$-nearest neighbours algorithm, we build a model that predicts the food groups of a particular food item based on its nutritional information and explore how useful this model is to the food industry.
+
+% The objective of this project is to wrangle and analyse data contained within the \cite{FoodStandardsAustraliaNewZealand} dataset, for the purpose of answering an explicit and defined research question. We propose the inquiry: Can we predict the food group of a food item, based solely on its nutritional information? We implemented the supervised learning model of $k$-nearest neighbours to predict and explore the relationship between nutritional information and food group classification.
 
 \subsection{Research Question}
 % 1. What is the research question?
@@ -62,25 +64,27 @@ To what extent can we predict the food group of a food item based solely on its 
 
 \subsection{Target Audience}
 % 2. Who are the target audience.
-The outcome of this project may be interesting to supermarket chains. If the model is sufficiently accurate, it could be used to detect food items that may not be labelled correctly or are missing labels. Better classification of food items can improve a supermarket's inventory management and/or product placement and ultimately improve the shopping experience of customers.
+The outcome of this report may be interesting to major supermarket chains such as Coles or Woolworths. If the model is sufficiently accurate, it could be useful in detecting food items that may not be labelled correctly or are missing labels in a particular batch of food items sent to a store. Better classification of food items would improve a supermarket's inventory management and/or product placement and ultimately improve the shopping experience of customers.
 
-The findings of this exploration may be of value to a number of audiences, such as nutritionists, health researchers, consumers, educational institutions and food retailers.  An effective food group classification model has many practical applications such as:
-\begin{itemize}
-    \item Detection of food items that are labelled incorrectly, either by accident or with the intent to mislead consumers
-    \item Improving a retailer's inventory management and product placement, and ultimately a customer's shopping experience
-    \item Effective assessment of an individual's nutritional intake and dietary pattern
-    \item Educating and enhancing public understanding of food groups, and general nutritional literacy
-\end{itemize}
+% The findings of this exploration may be of value to a number of audiences, such as nutritionists, health researchers, consumers, educational institutions and food retailers.  An effective food group classification model has many practical applications such as:
+% \begin{itemize}
+%     \item Detection of food items that are labelled incorrectly, either by accident or with the intent to mislead consumers
+%     \item Improving a retailer's inventory management and product placement, and ultimately a customer's shopping experience
+%     \item Effective assessment of an individual's nutritional intake and dietary pattern
+%     \item Educating and enhancing public understanding of food groups, and general nutritional literacy
+% \end{itemize}
 
 
 
 \subsection{Dataset}
 % 3. The dataset you have chosen.
-We make use of the dataset from \cite{FoodStandardsAustraliaNewZealand} containing 1616 food items and their nutritional information. This dataset contains all the information we need to answer our research question as each food item has a \verb|Classification| (food group) and respective nutritional information (such as energy, protein, etc.). To give us more context to the \verb|Classification| column, we also use a complementary dataset from \cite{FoodClassification} which maps numerical classifications to their respective food groups which become very useful when preprocessing the data and analysing the results.
+We make use of the dataset from \cite{FoodStandardsAustraliaNewZealand} containing 1616 food items and their nutritional information. This dataset contains all the information we need to answer our research question as each food item has a \verb|Classification| (food group) and respective nutritional information (such as energy, protein, etc.). To give us more context to the \verb|Classification| column, we also use a complementary dataset from \cite{FoodClassification} which maps numerical classifications to their respective food groups which becomes very useful when preprocessing the data and analysing the results.
 
 \section{Methodology}
 
 \emph{What wrangling and analysis methods (including at least one supervised learning method) have you applied? Why have you chosen these methods over other alternatives? How do you perform the experiment?}
+
+During the first stages of our investigation, we were deciding on whether we should use linear regression analysis or by implementing k-nearest-neighbours classification. After finalising our research question, we wanted to see how well supervised learning could classify a food’s group based on its nutritional values. We realised that this question could not very well be answered by exploring the relationships between nutritional values. As our research question relied heavily on classification, we implemented k-nearest-neighbours in our investigation.
 
 \subsection{Data Wrangling}
 
@@ -126,6 +130,8 @@ We also employed a 10-fold cross validation approach to determine the optimal va
 
 Continuing with each variation’s optimal, we also evaluated the final knn model using cross validation. By splitting the test data into 7 folds, (to somewhat emulate the 85\% to 15\% training and test split), we were able to evaluate whether our model could consistently and accurately predict a food item’s food group, even when trained and tested on different sections of the preprocessed data; i.e., verify that the initial success of the model was not a fluke.
 
+The data was also evaluated using bootstrap validation, where the KNN model’s performance was measured against multiple random subsets of the original data, called bootstrap samples. Bootstrap samples were created using randomly selected data points and the KNN model trained upon them 1000 times, the high number of samples allowing for more accurate performance metrics. This validation reduces bias introduced by KNN from the single training-test split and enhances the model's accuracy assessment by ensuring a more robust and unique evaluation every time it is run.
+
 \section{Results}
 \emph{What are the key results your research has obtained?}
 
@@ -162,6 +168,20 @@ Refer back to what people understand to be a food group, what the outcome of thi
 Interpret the results: WHAT DO THEY TELL US
 
 Important - discuss thoroughly the limitations of the model, REFER TO RUBRIC FOR POINTS TO COVER
+
+
+%response
+In this study, one part of the pre-processing caught our eye: the number of food groups to be ingested by the miscellaneous group. Three different variations of the data were created, focusing on the top 6, 13 and 23 largest food groups [can correct me here if I’m describing them incorrectly]. As the number of food groups increased, the accuracy of predicting the specific food group for each item decreased. This indicates that the model performs better in categorising foods into larger, more general food groups, but struggles with smaller, more specialised groups. This brings about a limitation of the model, and into question its accuracy. This analysis highlights how post-processing techniques can significantly influence the data and the resulting predictions, demonstrating the importance of careful consideration and understanding of the potential effects of post-processing methods.
+
+The study found that the predictive model is highly accurate in determining food groups based on a food’s nutritional values, giving an 80\%-90\% range across the three different methods of accuracy verification. In the bootstrap validation, the high precision of 75\%-88\% ensures reliable positive predictions while the high recall of 70\%-90\% guarantees accurate identification of data. The high F1 score indicates that the model is successful in achieving both high precision and high recall, making it a reliable tool predicting food groups based on nutritional information.
+[Further discussion of the cross-fold validation results here, of which I am unsure how to describe]
+
+However, these high accuracy rates still allow margins for error, which could be problematic considering the vast number of food items found in e.g. supermarkets. If there was an error of roughly 15\% allowed, as our data suggests, it would still require a great deal of manual data checking which would be time-consuming and challenging due to the large volume of items. It brings into question whether this model is worth the potential time and money saved, when there is simply going to have to be time and money spent regardless just to check for errors.
+
+We also came across the potential issue of overfitting in the bootstrap validation technique. It shows that the bootstrap accuracy might be higher than the cross-fold accuracy, likely due to the training data being overused in the resampling process, which could have led to overfitting. However, the high cross-fold validation accuracy has been used to mitigate this concern, providing confidence that the dataset can be effectively utilised for training the model.
+[Is the cross-fold validation trustworthy enough to be used in place of the bootstrap validation here?]
+
+
 
 
 \section{Conclusion}
