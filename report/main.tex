@@ -64,7 +64,7 @@ To what extent can we predict the food group of a food item based solely on its 
 
 \subsection{Target Audience}
 % 2. Who are the target audience.
-The outcome of this report may be interesting to major supermarket chains such as Coles or Woolworths. If the model is sufficiently accurate, it could be useful in detecting food items that may not be labelled correctly or are missing labels in a particular batch of food items sent to a store. Better classification of food items would improve a supermarket's inventory management and/or product placement and ultimately improve the shopping experience of customers.
+The outcome of this report may be interesting to major supermarket chains such as Coles or Woolworths. If the model is sufficiently accurate, it could be useful in detecting food items that may or may not be labelled correctly or are missing labels in a particular batch of food items sent to a store. Better classification of food items would improve a supermarket's inventory management as well as its product placement, which will ultimately improve the shopping experience of customers.
 
 % The findings of this exploration may be of value to a number of audiences, such as nutritionists, health researchers, consumers, educational institutions and food retailers.  An effective food group classification model has many practical applications such as:
 % \begin{itemize}
@@ -78,13 +78,15 @@ The outcome of this report may be interesting to major supermarket chains such a
 
 \subsection{Dataset}
 % 3. The dataset you have chosen.
-We make use of the dataset from \cite{FoodStandardsAustraliaNewZealand} containing 1616 food items and their nutritional information. This dataset contains all the information we need to answer our research question as each food item has a \verb|Classification| (food group) and respective nutritional information (such as energy, protein, etc.). To give us more context to the \verb|Classification| column, we also use a complementary dataset from \cite{FoodClassification} which maps numerical classifications to their respective food groups which becomes very useful when preprocessing the data and analysing the results.
+We make use of the dataset from \cite{FoodStandardsAustraliaNewZealand} containing 1616 food items and their nutritional information. This dataset contains all the information we need to answer our research question as each food item has a \verb|Classification| (food group) and respective nutritional information (such as energy, protein, etc.). We also use a complementary dataset from \cite{FoodClassification} which maps numerical classifications to their respective food groups which becomes very useful when providing some domain context during preprocessing and analysis.
 
 \section{Methodology}
 
 \emph{What wrangling and analysis methods (including at least one supervised learning method) have you applied? Why have you chosen these methods over other alternatives? How do you perform the experiment?}
 
-During the first stages of our investigation, we were deciding on whether we should use linear regression analysis or by implementing k-nearest-neighbours classification. After finalising our research question, we wanted to see how well supervised learning could classify a food’s group based on its nutritional values. We realised that this question could not very well be answered by exploring the relationships between nutritional values. As our research question relied heavily on classification, we implemented k-nearest-neighbours in our investigation.
+% TODO: rewrite this paragraph
+During the initial stages of our investigation, we debated over linear regression on a continuous variable such as \verb|Energy with dietary fibre, equated (kJ)| or $k$-nearest neighbours on a categorical variable such as \verb|Classification|. We explored both options and found it more interesting and more valuable to tackle the latter. All data wrangling techniques are implemented in \verb|preprocessing.ipynb| and all supervised learning and analysis techniques are implemented in \verb|knn.ipynb|.
+% During the first stages of our investigation, we explored different target variables given any subset of the nutritional information. We initially considered predicting the \verb|Classification| of a food item but found that the number of unique classifications was too large to be useful. Then we pivoted for some time toward predicting the \verb|Energy|
 
 \subsection{Data Wrangling}
 
@@ -93,29 +95,31 @@ During the first stages of our investigation, we were deciding on whether we sho
 Prior to any use of machine learning, we evaluated  the quality of the data and found that it was not clean. Thus, we implemented various preprocessing techniques to ensure that the data was suitable to be included in the data pipeline. 
 
 
-A large number of food items were wholly missing particular nutrition values. Understanding that this is likely an indication that a food has either an absence of the nutrient (eg, 0g) or that the food has not been checked for the nutrient's presence, we chose to set all NaN values to 0. Next, given that Food Standards Australia New Zealand (2013) indicates that the first two digits of a food's 'Classification' denote its major food group, each item's classification was simplified to these two characters. Given that there are 24 unique food groups (including unclassified items as a group), (Fig. 1) we also chose to simplify and compress less populated food groups, i.e., those containing very few food items, into a broader group, named miscellaneous. 
+A large number of food items were wholly missing particular nutrition values. Understanding that this is likely an indication that a food has either an absence of the nutrient (eg, 0g) or that the food has not been checked for the nutrient's presence, we chose to set all NaN values to 0. Next, given that Food Standards Australia New Zealand (2013) indicates that the first two digits of a food's \verb|Classification| denote its major food group, each item's classification was simplified to these two characters. Doing so reduced the number of unique classifications drastically (from 290 to 23), which made our $k$-nn supervised learning model more effective later on. Given that there are now 23 unique food groups, as seen in Figure \ref{fig:food-group-distribution}, we also chose to simplify and compress less populated food groups, i.e., those containing very few food items, into a broader group, named \verb|Miscellaneous|.
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.9\textwidth]{report/figs/number-of-rows-per-food-group.png}
-    \caption{The distribution of food items in twenty-three unique food groups in the \cite{FoodStandardsAustraliaNewZealand} dataset.}
+    \caption{The distribution of food items in twenty-three unique food groups not including unclassified items in the \cite{FoodStandardsAustraliaNewZealand} dataset.}
     \label{fig:food-group-distribution}
 \end{figure}
 
-However, rather than arbitrarily choosing a number of food groups to be condensed into 'miscellaneous' (group 31), we opted to explore 3 different versions of the miscellaneous grouping; with 18, 10, and 2 groups (including the existing miscellaneous group) respectively condensed into miscellaneous. This can also be understood as providing the machine learning model with 6, 13 and 23 total labels, respectively for each variation.
+However, rather than arbitrarily choosing a number of food groups to be condensed into \verb|Miscellaneous| (group 31), we opted to explore 3 different versions of the miscellaneous grouping; with 23, 14, and 6 groups (including the miscellaneous group) respectively condensed into \verb|Miscellaneous|. This can also be understood as providing the machine learning model with 6, 14 and 23 total labels, respectively for each variation.
 
-\subsection{Data Analysis}
-\subsubsection{Feature selection}
+\subsubsection{Feature Selection}
 
-We also utilised the \verb|mutual_info_classif| from \verb|sklearn|'s feature selection module to evaluate which nutritional features contained the most useful information for classification. With each food item having up to 290 different nutritional measures, the data is highly dimensional, and thus, via feature selection, we improve the efficiency and effectiveness of the KNN model. We initially considered using a linear regression model, but opted to continue our investigation using k-NN, as this task called for classification, rather than determining the relationship between nutritional data. With the mutual information calculated, by choosing an appropriate threshold, we could remove some features that were not particularly insightful. This was done for each set of food groups, to ensure that they could be compared at their optimal performance each. 
+We also utilised \verb|mutual_info_classif| from \verb|sklearn|'s feature selection Python module to evaluate which nutritional features contained the most useful information for classification. With each food item having up to 290 different nutritional measures, the data is highly dimensional, and thus, through feature selection, we can improve the effectiveness of the $k$-nn model. With the mutual information calculated, by choosing an appropriate threshold (\verb|THRESHOLD=0.2| in \verb|preprocessing.ipynb|), we could remove some features that were not particularly insightful. This was done for each set of food groups, to ensure that they could be compared fairly.
+
+We had initially considered using linear regression, but opted to continue our investigation using $k$-nn, as our research question required that our target variable be categorical/discrete, rather than continuous.  This is why, in \verb|preprocessing.ipynb|, we show working for both \verb|./archive/linear-regression.ipynb| and \verb|./src/knn.ipynb|, but only include the latter in the \verb|src| directory.
 
 \subsection{Supervised Learning}
 
-\subsubsection{Training and test split}
+\subsubsection{Training and Test Split}
 
-With our data preprocessed and cleaned, we decided to use an 85\% training,15\% test split.  The model was created using only the \verb|train| data, to ensure that the model could be fairly tested and evaluated based on its performance on unseen data, thus avoiding overfitting and ensuring generalisation. 
+With our data preprocessed and cleaned, we decided to use an 85\% to 15\% train/test split (\verb|TEST_SPLIT=0.15| in \verb|knn.py|). The model was created using only the \verb|train| data, to ensure that the model could be fairly tested and evaluated based on its performance on unseen data, thus avoiding overfitting and ensuring generalisation.
 
-We also employed a 10-fold cross validation approach to determine the optimal value of k for each set of food groups. Calculating the mean accuracy of the cross validated KNN model for a wide range of k values revealed that a k of 1 performed best for each variation, with measured mean accuracy ranging from 82.81\% to 89.15\%. Given that a k value of 1 may potentially cause the model to be overfitted it was decided to err on the side of caution and opt for each variation's next best k, especially given this is not wholly detrimental to the model's accuracy. 
+% TODO: where to know the percentages?
+We also employed a 10-fold cross validation approach to optimise the value of $k$ for each set of food groups. Calculating the mean accuracy of the cross validated $k$-nn model for a wide range of $k$ values (Figure \ref{fig:knn-cross-validation}) revealed that a $k$ of 1 performed best for each variation. Given that a $k$ value of 1 may potentially cause the model to be overfitted, as stated from \cite{StackExchangePost}, it was decided to err on the side of caution and opt for each variation's next best $k$, especially given this is not wholly detrimental to the model's accuracy. This procedure can be seen in detail in \verb|knn.py| under the $k$-nn heading in the first function \verb|cross_validate()|.
 
 \begin{figure}[htbp]
     \centering
@@ -128,9 +132,9 @@ We also employed a 10-fold cross validation approach to determine the optimal va
     \label{fig:knn-cross-validation}
 \end{figure}
 
-Continuing with each variation’s optimal, we also evaluated the final knn model using cross validation. By splitting the test data into 7 folds, (to somewhat emulate the 85\% to 15\% training and test split), we were able to evaluate whether our model could consistently and accurately predict a food item’s food group, even when trained and tested on different sections of the preprocessed data; i.e., verify that the initial success of the model was not a fluke.
+Continuing with each variation's optimal, we also evaluated the final $k$-nn models using cross validation. By splitting the test data into 7 folds, (to somewhat emulate the 85\% to 15\% training and test split), we were able to evaluate whether our model could consistently and accurately predict a food item's food group, even when trained and tested on different sections of the preprocessed data; i.e., verify that the initial success of the model was not a fluke.
 
-The data was also evaluated using bootstrap validation, where the KNN model’s performance was measured against multiple random subsets of the original data, called bootstrap samples. Bootstrap samples were created using randomly selected data points and the KNN model trained upon them 1000 times, the high number of samples allowing for more accurate performance metrics. This validation reduces bias introduced by KNN from the single training-test split and enhances the model's accuracy assessment by ensuring a more robust and unique evaluation every time it is run.
+The data was also evaluated using bootstrap validation, where the $k$-nn model's performance was measured against multiple random subsets of the original data, called bootstrap samples. Bootstrap samples were created using randomly selected data points and the $k$-nn model trained upon them 1000 times, the high number of samples allowing for more accurate performance metrics. This validation reduces bias introduced by $k$-nn from the single training-test split and enhances the model's accuracy assessment by ensuring a more robust and unique evaluation every time it is run.
 
 \section{Results}
 \emph{What are the key results your research has obtained?}
