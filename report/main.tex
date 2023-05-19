@@ -87,7 +87,6 @@ We make use of the dataset from \cite{FoodStandardsAustraliaNewZealand} containi
 
 \emph{What wrangling and analysis methods (including at least one supervised learning method) have you applied? Why have you chosen these methods over other alternatives? How do you perform the experiment?}
 
-% TODO: rewrite this paragraph
 During the initial stages of our investigation, we debated over linear regression on a continuous variable such as \verb|Energy with dietary fibre, equated (kJ)| or $k$-nearest neighbours on a categorical variable such as \verb|Classification|. We explored both options and found it more interesting and more valuable to tackle the latter. All data wrangling techniques are implemented in \verb|preprocessing.ipynb| and all supervised learning and analysis techniques are implemented in \verb|knn.ipynb|.
 % During the first stages of our investigation, we explored different target variables given any subset of the nutritional information. We initially considered predicting the \verb|Classification| of a food item but found that the number of unique classifications was too large to be useful. Then we pivoted for some time toward predicting the \verb|Energy|
 
@@ -137,10 +136,29 @@ We also employed a 10-fold cross validation approach to optimise the value of $k
 
 Continuing with each variation's optimal, we also evaluated the final $k$-nn models using cross validation. By splitting the test data into 7 folds, (to somewhat emulate the 85\% to 15\% training and test split), we were able to evaluate whether our model could consistently and accurately predict a food item's food group, even when trained and tested on different sections of the preprocessed data; i.e., verify that the initial success of the model was not a fluke.
 
-The data was also evaluated using bootstrap validation, where the $k$-nn model's performance was measured against multiple random subsets of the original data, called bootstrap samples. Bootstrap samples were created using randomly selected data points and the $k$-nn model trained upon them 1000 times, the high number of samples allowing for more accurate performance metrics. This validation reduces bias introduced by $k$-nn from the single training-test split and enhances the model's accuracy assessment by ensuring a more robust and unique evaluation every time it is run.
+The data was also evaluated using bootstrap validation, where the $k$-nn model's performance was measured against random subsets of the original data. Bootstrap samples were created using randomly selected data points and the $k$-nn model trained upon them 1000 times, the high number of samples allowing for more accurate performance metrics. This validation reduces bias introduced by $k$-nn from the single training-test split and enhances the model's accuracy assessment by ensuring a more robust and unique evaluation every time it is run.
 
 \section{Results}
 \emph{What are the key results your research has obtained?}
+
+\SaveVerb{knn}|knn.ipynb|
+\SaveVerb{evaluation}|Evaluation|
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|c|c|c|c|}
+        \toprule
+        & $k$ & Accuracy & CV Mean Accuracy & Bootstrap Mean Accuracy \\
+        \hline
+        Top 6     & 2 & 88.48\% & 84.78\% & 90.83\% \\
+        Top 14    & 3 & 85.19\% & 81.31\% & 86.58\% \\
+        Top 23    & 3 & 83.95\% & 80.69\% & 85.80\% \\
+        \bottomrule
+    \end{tabular}
+    \vspace{0.4cm}
+    \caption{Accuracies of models trained on the 6, 14, and 23 food group variations. See the \protect\UseVerb{evaluation} section of \protect\UseVerb{knn} for values.}
+    \label{tab:table}
+\end{table}
+
 
 \SaveVerb{topx}|TOP_X|
 \begin{figure}[htbp]
@@ -154,40 +172,26 @@ The data was also evaluated using bootstrap validation, where the $k$-nn model's
     \label{fig:confusion-matrices}
 \end{figure}
 
-% OUTDATED
-In our analysis, we managed to achieve an accuracy score of 90.12\% (maybe not accurate?). Quite a high accuracy score suggests that our model can very accurately predict the classification of a food given its nutritional information. It is critical to note that during our evaluation process using 10-fold cross-validation, we witnessed a steep drop in our accuracy metrics, seeing accuracy range from 21.67\% to 65.94\%.
+In general, $k$-nn appears to perform better when classifying a smaller number of food groups. In Table \ref{tab:table}, we can see that the $k$-nn performed best when classifying the top 6 food groups, beating all other variations in all accuracy metrics. We believe this is due to the fact that the model is able to more easily distinguish between the larger, more general food groups, due to the larger number of data points available for the those groups, as was seen in the distribution bar graph (Figure \ref{fig:food-group-distribution}). The confusion matrices (Figure \ref{fig:confusion-matrices}) here further validate this hypothesis, as we can see the diagonal values get dimmer and dimmer as the number of food groups increases.
 
 \section{Discussion}
 \emph{Why are your results significant and valuable?}
 
-Given our results have shown that our machine learning model has achieved an accuracy score of 90.12\%, it suggests that our model can very accurately predict the classification of a good given its nutritional information.(Add bit discussing benefits this can imply for use, specifically regarding our research question).
+In this study, one specific aspect of the pre-processing was of particular interest: the number of food groups to be collated by the miscellaneous group. Three different variations of the data were created, focusing on the top 6, 14 and 23 largest food groups. All variations of our model were well above a conservative 75\% accurate, which is an indication that the model is effective and somewhat reliable.
+Across the board, as the number of food groups increased, the accuracy of predicting the specific food group for each item decreased; the knn model with 6 groups performed better than the models with 14 and 23 groups, respectively. This indicates that the model performs better in categorising foods into larger, more general food groups, but struggles with smaller, more nuanced groups. This could be due to multiple reasons, such as: the model struggling to recognise trends and patterns in groups of very little data, and these smaller groups being inherently more complex in nature. Less populated food groups are likely to be areas of ambiguity; the foods may be uncommon or even delicacies, such as in the case of group 34, ‘Reptiles, amphibia and insects’. These foods are also not necessarily categorised by their nutritional value, but rather their origin or specific purpose, such as group 30, ‘Special dietary foods’. Where these labels are determined on factors other than nutritional values, the model begins to encounter difficulties.
+This highlights a limitation of the dataset, and thus suggests there are restraints to the supervised learning model’s accuracy. This analysis also supports the notion that pre-processing techniques also significantly influence the data and the resultant predictions, emphasising the importance of careful consideration and understanding of the potential effects of pre-processing methods. Additionally, the very consistent improvement of the model where food groups are simplified strongly suggests that if this process were to be conducted again, the model could become even more effective and accurate with a more balanced and rich dataset.
 
-Interpretation of the results (What are the key results your research has obtained? Why are your results significant and valuable?)
-Limitations and future improvements
-
-DISCUSSION POINTS (not exhaustive):
-3 variations of the span of miscellaneous group - elaborate on why we chose to do this (because it explores how preprocessing decisions affects the model etc, and because it shows the relationship between nutritional values and food groups and because some groups have few food items, elaborate more than this
-
-Discuss what is shown in the graphs, compare the results of the three variations
-
-If bootstrap accuracies is still much higher than cross validation and initial accuracy values, speculate why this has happened, research and refer to chatgpt screenshot on discord to help explain this
-Refer back to what people understand to be a food group, what the outcome of this investigation tells us at the end of the day, elaborate on the significance and justification of the results
-
-Interpret the results: WHAT DO THEY TELL US
-
-Important - discuss thoroughly the limitations of the model, REFER TO RUBRIC FOR POINTS TO COVER
+\subsection{Evaluation Methods}
+To ensure that a single evaluation method did not inspire overconfidence in the results of this data, we employed cross validation and bootstrap validation, to generate accuracy scores and graphs, and confusion matrices. The predictive model we constructed was found to be generally highly accurate in determining food groups from nutritional values, exhibiting an 70 - 90\% accuracy range across the three different methods of accuracy verification.
+In the bootstrap validation, the high precision of 75 - 88\% ensures reliable positive predictions while the high recall of 70 - 90\% infers accurate identification of data. The high F1 score indicates that the model is successful in achieving both high precision and high recall, making it a reliable tool predicting food groups based on nutritional information.
 
 
-%response
-In this study, one part of the pre-processing caught our eye: the number of food groups to be ingested by the miscellaneous group. Three different variations of the data were created, focusing on the top 6, 13 and 23 largest food groups [can correct me here if I’m describing them incorrectly]. As the number of food groups increased, the accuracy of predicting the specific food group for each item decreased. This indicates that the model performs better in categorising foods into larger, more general food groups, but struggles with smaller, more specialised groups. This brings about a limitation of the model, and into question its accuracy. This analysis highlights how post-processing techniques can significantly influence the data and the resulting predictions, demonstrating the importance of careful consideration and understanding of the potential effects of post-processing methods.
 
-The study found that the predictive model is highly accurate in determining food groups based on a food’s nutritional values, giving an 80\%-90\% range across the three different methods of accuracy verification. In the bootstrap validation, the high precision of 75\%-88\% ensures reliable positive predictions while the high recall of 70\%-90\% guarantees accurate identification of data. The high F1 score indicates that the model is successful in achieving both high precision and high recall, making it a reliable tool predicting food groups based on nutritional information.
-[Further discussion of the cross-fold validation results here, of which I am unsure how to describe]
+The cross validation of the knn models produced accuracy scores ranging from ~79 to 87\%. This illustrates that the model still has compelling effectivity even when trained and tested on a variety of different partitioning of the data into train and test sets. This means that the model has good generalisability and predictive capability. However, these cross-validation scores being lower than the initial model does suggest that the initial implementation of the knn model was perhaps endowed with a test set primarily consisting of strongly identifiable food groups.
 
-However, these high accuracy rates still allow margins for error, which could be problematic considering the vast number of food items found in e.g. supermarkets. If there was an error of roughly 15\% allowed, as our data suggests, it would still require a great deal of manual data checking which would be time-consuming and challenging due to the large volume of items. It brings into question whether this model is worth the potential time and money saved, when there is simply going to have to be time and money spent regardless just to check for errors.
+There also exists the potential issue of overfitting within and thus overconfidence inspired by the bootstrap validation. The bootstrap validation scores are generally higher than the cross-validation scores, suggesting that the model is performing better on resampled data compared to the original data. The difference is not so large that this is of major concern, however this is some reason to cautiously question and doubt the upper bounds of the apparent accuracy of this model. 
 
-We also came across the potential issue of overfitting in the bootstrap validation technique. It shows that the bootstrap accuracy might be higher than the cross-fold accuracy, likely due to the training data being overused in the resampling process, which could have led to overfitting. However, the high cross-fold validation accuracy has been used to mitigate this concern, providing confidence that the dataset can be effectively utilised for training the model.
-[Is the cross-fold validation trustworthy enough to be used in place of the bootstrap validation here?]
+However, these high accuracy rates still allow margins for error, which could be problematic in a practical application of this model. For example, considering the vast number of food items found in a supermarket, an error rate of approximately 15\%, as our data suggests, would still require a great deal of manual data checking which would be time-consuming and challenging. Considering if the model did not 100\% accurately label groups, it may provide a bad shopping experience for supermarket chains’ customers, with foods being in the wrong places, or perhaps even endangering customers, who may be placed in danger due to perhaps, anaphylaxis or other dietary health concerns. Thus, there may be a need for a significant amount of manual checking, which can be costly in terms of time and labour. In its current state, trained only on the data we were provided in this project, this model may not be suitable for immediate implementation and reliance on in this specific use case. 
 
 
 
@@ -195,7 +199,7 @@ We also came across the potential issue of overfitting in the bootstrap validati
 \section{Conclusion}
 \emph{What are the limitations of your results and how can the project be improved for future?}
 
-Throughout this investigation, we gained valuable insights into the data processing pipeline. The processes and strategies we utilised in preprocessing and analysis of the data elucidate the relationship between nutritional values and food groupings. With the ultimate goal of exploring and answering the question of ‘to what extent can we predict the food group of a food item based solely on its nutritional information?’,  this research endeavour has demonstrated this is entirely possible to achieve. It has also shown that the effectiveness of this enterprise is dependent on not only the initial data available, but also highly contingent on early-stages data cleaning and preparation. The validation and evaluation we conducted on our knn models supportively indicate that this is generally a successful way of predicting food groups, despite the aforementioned limitations. Future investigations of similar nature would tremendously benefit from use of a more well-rounded and balanced data set, given that some classifications in this data set have as few as one or two food items. With a much larger dataset, future experiments could also aim to classify sub-groups, i.e., minor food groups, rather than major.
+Throughout this investigation, we gained valuable insights into the data processing pipeline. The processes and strategies we utilised in preprocessing and analysis of the data elucidate the relationship between nutritional values and food groupings. With the ultimate goal of exploring and answering the question of ‘to what extent can we predict the food group of a food item based solely on its nutritional information?’,  this research endeavour has demonstrated this is entirely possible to achieve. It has also shown that the effectiveness of this enterprise is dependent on not only the initial data available, but also highly contingent on early-stages data cleaning and preparation. The validation and evaluation we conducted on our KNN models supportively indicate that this is generally a successful way of predicting food groups, despite the aforementioned limitations. Future investigations of similar nature would tremendously benefit from use of a more well-rounded and balanced data set, given that some classifications in this data set have as few as one or two food items. With a much larger dataset, future experiments could also aim to classify sub-groups, i.e., minor food groups, rather than major.
 
 
 \newpage
