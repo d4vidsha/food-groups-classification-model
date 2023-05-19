@@ -27,7 +27,7 @@ This project uses Python 3.11.3. See [Additional requirements](#additional-requi
 
 1. Run the `preprocessing.ipynb` notebook to preprocess the data.
 
-   This will create a `data/generated` folder containing `preprocessed-data-classification.csv` and `preprocessed-data-regression.csv`, the former of which is used for the $k$-nn model and the latter of which is used for the linear regression model which we did not end up using.
+   This will create a `data/generated` folder containing `preprocessed-data-classification-first.csv`, `preprocessed-data-classification-second.csv` and `preprocessed-data-classification-third.csv`, which are the preprocessed data files used in our project.
 
 2. Run the `knn.ipynb` notebook to train and evaluate the $k$-nearest neighbour model.
 
