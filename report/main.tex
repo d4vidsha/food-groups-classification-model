@@ -16,8 +16,11 @@
 \usepackage{doi}
 \usepackage{minted}
 \usepackage{subfig}
+\usepackage{titlesec}
 \setcitestyle{aysep={,}}
 
+\titleformat{\subsubsection}
+  {\selectfont}{\thesubsubsection}{1em}{}
 
 
 \title{Predicting Food Groups \\ \vspace{0.5em} \large from nutritional information}
@@ -153,6 +156,7 @@ The data was also evaluated using bootstrap validation, where the $k$-nn model's
 
 % OUTDATED
 In our analysis, we managed to achieve an accuracy score of 90.12\% (maybe not accurate?). Quite a high accuracy score suggests that our model can very accurately predict the classification of a food given its nutritional information. It is critical to note that during our evaluation process using 10-fold cross-validation, we witnessed a steep drop in our accuracy metrics, seeing accuracy range from 21.67\% to 65.94\%.
+
 \section{Discussion}
 \emph{Why are your results significant and valuable?}
 
