@@ -1,8 +1,4 @@
-# Group: A2-Project 40
-
-Group leader: David Sha
-
-Members: Victoria Lyngaae, William Spongberg, Mason Sebek
+# food-groups-prediction-model
 
 ## Introduction
 
@@ -88,3 +84,10 @@ We will be using the current latest version of Python (v3.11.3 as of 24/04/2023)
     ```bash
     deactivate
     ```
+
+## Credits
+
+- Victoria Lyngaae
+- Mason Sebek
+- David Sha
+- William Spongberg
