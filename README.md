@@ -1,4 +1,4 @@
-# food-groups-prediction-model
+# food-groups-classification-model
 
 ## Introduction
 
